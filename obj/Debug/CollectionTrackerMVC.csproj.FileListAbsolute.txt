@@ -1,0 +1,2 @@
+C:\Users\pidgy\source\repos\CollectionTrackerMVC\obj\Debug\CollectionTrackerMVC.csprojAssemblyReference.cache
+C:\Users\pidgy\source\repos\CollectionTrackerMVC\obj\Debug\CollectionTrackerMVC.csproj.CoreCompileInputs.cache
