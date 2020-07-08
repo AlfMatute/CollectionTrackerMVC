@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<CollectionTrackerMVC.Models.BrandViewModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Brand";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -31,7 +31,7 @@
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.BrandId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.BrandId }) |
+            @*@Html.ActionLink("Details", "Details", new { id=item.BrandId }) |*@
             @Html.ActionLink("Delete", "Delete", new { id=item.BrandId })
         </td>
     </tr>

@@ -68,21 +68,7 @@ namespace CollectionTrackerMVC.Controllers
         }
         public ActionResult Edit(int id)
         {
-            BrandViewModel brand = null;
-            using(var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri("https://localhost:44394/api/");
-                var responseTask = client.GetAsync("brand/" + id.ToString());
-                responseTask.Wait();
-
-                var result = responseTask.Result;
-                if(result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<BrandViewModel>();
-                    readTask.Wait();
-                    brand = readTask.Result;
-                }
-            }
+            BrandViewModel brand = ReadFromApi(id);
             return View(brand);
         }
 
@@ -108,6 +94,49 @@ namespace CollectionTrackerMVC.Controllers
                 }
             }
             return View(model);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("https://localhost:44394/api/");
+                    var deleteTask = client.DeleteAsync("brand/" + id.ToString());
+                    deleteTask.Wait();
+
+                    var result = deleteTask.Result;
+                    if (!result.IsSuccessStatusCode)
+                    {
+                        var readError = result.Content.ReadAsStringAsync();
+                        readError.Wait();
+                        ModelState.AddModelError(String.Empty, readError.Result);
+                    }
+                }
+            }
+            catch { }
+            return RedirectToAction("Index");
+        }
+
+        public BrandViewModel ReadFromApi(int id)
+        {
+            BrandViewModel brand = null;
+            using(var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://localhost:44394/api/");
+                var responseTask = client.GetAsync("brand/" + id.ToString());
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if(result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<BrandViewModel>();
+                    readTask.Wait();
+                    brand = readTask.Result;
+                }
+            }
+            return brand;
         }
     }
 }
