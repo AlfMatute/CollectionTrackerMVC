@@ -15,7 +15,7 @@ namespace CollectionTrackerMVC.Controllers
             IEnumerable<CategoryViewModel> category = null;
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("https://localhost:44394/api/");
+                client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
                 bool? active = null;
                 var responseTask = client.GetAsync("category/" + active);
                 responseTask.Wait();
@@ -50,7 +50,7 @@ namespace CollectionTrackerMVC.Controllers
             {
                 using(var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("https://localhost:44394/api/Category");
+                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
                     var postJob = client.PostAsJsonAsync<CategoryViewModel>("Category", model);
                     postJob.Wait();
 
@@ -79,7 +79,7 @@ namespace CollectionTrackerMVC.Controllers
                 CategoryViewModel category = null;
                 using(var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("https://localhost:44394/api/");
+                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
                     var responseTask = client.GetAsync("category/" + id.ToString());
                     responseTask.Wait();
 
@@ -104,7 +104,7 @@ namespace CollectionTrackerMVC.Controllers
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("https://localhost:44394/api/Category");
+                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
                     var putJob = client.PutAsJsonAsync<CategoryViewModel>("Category", model);
                     putJob.Wait();
 
@@ -132,7 +132,7 @@ namespace CollectionTrackerMVC.Controllers
             {
                 using(var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("https://localhost:44394/api/");
+                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
                     var deleteTask = client.DeleteAsync("category/" + id.ToString());
                     deleteTask.Wait();
 

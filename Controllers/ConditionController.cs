@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Web;
-using System.Web.Management;
 using System.Web.Mvc;
 
 namespace CollectionTrackerMVC.Controllers
@@ -17,7 +15,7 @@ namespace CollectionTrackerMVC.Controllers
             IEnumerable<ConditionViewModel> condition = null;
             using(var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("https://localhost:44394/api/");
+                client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
                 bool? active = null;
                 var responseTask = client.GetAsync("condition/" + active);
                 responseTask.Wait();
@@ -52,7 +50,7 @@ namespace CollectionTrackerMVC.Controllers
             {
                 using(var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("https://localhost:44394/api/Condition");
+                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
                     var postJob = client.PostAsJsonAsync<ConditionViewModel>("Condition", model);
                     postJob.Wait();
 
@@ -81,7 +79,7 @@ namespace CollectionTrackerMVC.Controllers
                 ConditionViewModel condition = null;
                 using(var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("https://localhost:44394/api/");
+                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
                     var responseTask = client.GetAsync("condition/" + id.ToString());
                     responseTask.Wait();
 
@@ -106,7 +104,7 @@ namespace CollectionTrackerMVC.Controllers
             {
                 using(var client =  new HttpClient())
                 {
-                    client.BaseAddress = new Uri("https://localhost:44394/api/Condition");
+                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
                     var putJob = client.PutAsJsonAsync<ConditionViewModel>("Condition", model);
                     putJob.Wait();
 
@@ -134,7 +132,7 @@ namespace CollectionTrackerMVC.Controllers
             {
                 using(var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("https://localhost:44394/api/");
+                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
                     var deleteTask = client.DeleteAsync("condition/" + id.ToString());
                     deleteTask.Wait();
 

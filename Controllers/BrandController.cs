@@ -15,7 +15,7 @@ namespace CollectionTrackerMVC.Controllers
             IEnumerable<BrandViewModel> brand = null;
             using(var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("https://localhost:44394/api/");
+                client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
                 var responseTask = client.GetAsync("Brand");
                 responseTask.Wait();
 
@@ -49,7 +49,7 @@ namespace CollectionTrackerMVC.Controllers
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("https://localhost:44394/api/Brand");
+                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
                     var postJob = client.PostAsJsonAsync<BrandViewModel>("Brand", model);
                     postJob.Wait();
 
@@ -88,7 +88,7 @@ namespace CollectionTrackerMVC.Controllers
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("https://localhost:44394/api/Brand");
+                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
                     var putJob = client.PutAsJsonAsync<BrandViewModel>("Brand", model);
                     putJob.Wait();
 
@@ -116,7 +116,7 @@ namespace CollectionTrackerMVC.Controllers
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("https://localhost:44394/api/");
+                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
                     var deleteTask = client.DeleteAsync("brand/" + id.ToString());
                     deleteTask.Wait();
 
@@ -138,7 +138,7 @@ namespace CollectionTrackerMVC.Controllers
             BrandViewModel brand = null;
             using(var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("https://localhost:44394/api/");
+                client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
                 var responseTask = client.GetAsync("brand/" + id.ToString());
                 responseTask.Wait();
 
