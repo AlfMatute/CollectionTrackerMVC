@@ -9,33 +9,39 @@ namespace CollectionTrackerMVC.Controllers
 {
     public class CategoryController : Controller
     {
+        string ErrorTitle = "Category - Error";
+        string ErrorPart = "An error occurred when loading the page: ";
         // GET: Category
         public ActionResult Index()
         {
-            IEnumerable<CategoryViewModel> category = null;
-            using (var client = new HttpClient())
+            try
             {
-                client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
-                bool? active = null;
-                var responseTask = client.GetAsync("category/" + active);
-                responseTask.Wait();
+                IEnumerable<CategoryViewModel> category = null;
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
+                    bool? active = null;
+                    var responseTask = client.GetAsync("category/" + active);
+                    responseTask.Wait();
 
-                var result = responseTask.Result;
-                if(result.IsSuccessStatusCode)
-                {
-                    var readJob = result.Content.ReadAsAsync<IList<CategoryViewModel>>();
-                    readJob.Wait();
-                    category = readJob.Result;
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readJob = result.Content.ReadAsAsync<IList<CategoryViewModel>>();
+                        readJob.Wait();
+                        category = readJob.Result;
+                    }
+                    else
+                    {
+                        category = Enumerable.Empty<CategoryViewModel>();
+                        var readError = result.Content.ReadAsStringAsync();
+                        readError.Wait();
+                        ModelState.AddModelError(String.Empty, readError.Result);
+                    }
                 }
-                else
-                {
-                    category = Enumerable.Empty<CategoryViewModel>();
-                    var readError = result.Content.ReadAsStringAsync();
-                    readError.Wait();
-                    ModelState.AddModelError(String.Empty, readError.Result);
-                }
+                return View(category);
             }
-            return View(category);
+            catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }
         }
 
         public ActionResult Create()
@@ -68,8 +74,7 @@ namespace CollectionTrackerMVC.Controllers
                 }
                 return View(model);
             }
-            catch { }
-            return RedirectToAction("Index");
+            catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }
         }
 
         public ActionResult Edit(int id)
@@ -93,8 +98,7 @@ namespace CollectionTrackerMVC.Controllers
                 }
                 return View(category);
             }
-            catch { }
-            return RedirectToAction("Index");
+            catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }
         }
 
         [HttpPost]
@@ -122,8 +126,7 @@ namespace CollectionTrackerMVC.Controllers
                 }
                 return View(model);
             }
-            catch { }
-            return RedirectToAction("Index");
+            catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }
         }
 
         public ActionResult Delete(int id)
@@ -145,7 +148,7 @@ namespace CollectionTrackerMVC.Controllers
                     }
                 }
             }
-            catch { }
+            catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }
             return RedirectToAction("Index");
         }
     }

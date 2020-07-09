@@ -3,49 +3,45 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Web;
 using System.Web.Mvc;
 
 namespace CollectionTrackerMVC.Controllers
 {
-    public class BrandController : Controller
+    public class CollectionController : Controller
     {
-        string ErrorTitle = "Brand - Error";
+        string ErrorTitle = "Collection - Error";
         string ErrorPart = "An error occurred when loading the page: ";
-        // GET: Brand
+        // GET: Collection
         public ActionResult Index()
         {
             try
             {
-                IEnumerable<BrandViewModel> brand = null;
+                IEnumerable<CollectionViewModel> collection = null;
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
-                    var responseTask = client.GetAsync("Brand");
+                    var responseTask = client.GetAsync("collection/");
                     responseTask.Wait();
 
                     var result = responseTask.Result;
                     if (result.IsSuccessStatusCode)
                     {
-                        var readJob = result.Content.ReadAsAsync<IList<BrandViewModel>>();
+                        var readJob = result.Content.ReadAsAsync<IList<CollectionViewModel>>();
                         readJob.Wait();
-                        brand = readJob.Result;
+                        collection = readJob.Result;
                     }
                     else
                     {
-                        brand = Enumerable.Empty<BrandViewModel>();
+                        collection = Enumerable.Empty<CollectionViewModel>();
                         var readError = result.Content.ReadAsStringAsync();
                         readError.Wait();
                         ModelState.AddModelError(String.Empty, readError.Result);
                     }
                 }
-                return View(brand);
+                return View(collection);
             }
-            catch(Exception ex) 
-            {
-                ViewBag.ErrorTitle = ErrorTitle;
-                ViewBag.ErrorMessage = ErrorPart + ex.Message;
-                return View("Error");
-            }
+            catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }
         }
 
         public ActionResult Create()
@@ -54,14 +50,14 @@ namespace CollectionTrackerMVC.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(BrandViewModel model)
+        public ActionResult Create(CollectionViewModel model)
         {
             try
             {
-                using (var client = new HttpClient())
+                using(var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
-                    var postJob = client.PostAsJsonAsync<BrandViewModel>("Brand", model);
+                    var postJob = client.PostAsJsonAsync<CollectionViewModel>("collection", model);
                     postJob.Wait();
 
                     var postResult = postJob.Result;
@@ -78,37 +74,42 @@ namespace CollectionTrackerMVC.Controllers
                 }
                 return View(model);
             }
-            catch (Exception ex)
-            {
-                ViewBag.Title = ErrorTitle;
-                ViewBag.ErrorMessage = ErrorPart + ex.Message;
-                return View("Error");
-            }
+            catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }
         }
+
         public ActionResult Edit(int id)
         {
             try
             {
-                BrandViewModel brand = ReadFromApi(id);
-                return View(brand);
+                CollectionViewModel collection = null;
+                using(var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
+                    var responseTask = client.GetAsync("collection/" + id.ToString());
+                    responseTask.Wait();
+
+                    var result = responseTask.Result;
+                    if(result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<CollectionViewModel>();
+                        readTask.Wait();
+                        collection = readTask.Result;
+                    }
+                }
+                return View(collection);
             }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorTitle = ErrorTitle;
-                ViewBag.ErrorMessage = ErrorPart + ex.Message;
-                return View("Error");
-            }
+            catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }
         }
 
         [HttpPost]
-        public ActionResult Edit(BrandViewModel model)
+        public ActionResult Edit(CollectionViewModel model)
         {
             try
             {
-                using (var client = new HttpClient())
+                using(var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
-                    var putJob = client.PutAsJsonAsync<BrandViewModel>("Brand", model);
+                    var putJob = client.PutAsJsonAsync<CollectionViewModel>("Collection", model);
                     putJob.Wait();
 
                     var putResult = putJob.Result;
@@ -125,26 +126,21 @@ namespace CollectionTrackerMVC.Controllers
                 }
                 return View(model);
             }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorTitle = ErrorTitle;
-                ViewBag.ErrorMessage = ErrorPart + ex.Message;
-                return View("Error");
-            }
+            catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }
         }
 
         public ActionResult Delete(int id)
         {
             try
             {
-                using (var client = new HttpClient())
+                using(var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
-                    var deleteTask = client.DeleteAsync("brand/" + id.ToString());
+                    var deleteTask = client.DeleteAsync("collection/" + id.ToString());
                     deleteTask.Wait();
 
                     var result = deleteTask.Result;
-                    if (!result.IsSuccessStatusCode)
+                    if(!result.IsSuccessStatusCode)
                     {
                         var readError = result.Content.ReadAsStringAsync();
                         readError.Wait();
@@ -154,26 +150,6 @@ namespace CollectionTrackerMVC.Controllers
             }
             catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }
             return RedirectToAction("Index");
-        }
-
-        public BrandViewModel ReadFromApi(int id)
-        {
-            BrandViewModel brand = null;
-            using(var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
-                var responseTask = client.GetAsync("brand/" + id.ToString());
-                responseTask.Wait();
-
-                var result = responseTask.Result;
-                if(result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<BrandViewModel>();
-                    readTask.Wait();
-                    brand = readTask.Result;
-                }
-            }
-            return brand;
         }
     }
 }

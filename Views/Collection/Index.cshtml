@@ -1,0 +1,58 @@
+﻿@model IEnumerable<CollectionTrackerMVC.Models.CollectionViewModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ArticleName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AcquisitionDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ArticleCost)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FabricationDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ArticleName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AcquisitionDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ArticleCost)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FabricationDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.CollectionId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.CollectionId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.CollectionId })
+        </td>
+    </tr>
+}
+
+</table>
