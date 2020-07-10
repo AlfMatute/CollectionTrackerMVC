@@ -46,7 +46,55 @@ namespace CollectionTrackerMVC.Controllers
 
         public ActionResult Create()
         {
-            return View();
+            CollectionViewModel model = new CollectionViewModel();
+            FillCollections(ref model);
+            return View(model);
+        }
+
+        public void FillCollections(ref CollectionViewModel model)
+        {
+            IEnumerable<BrandViewModel> brands = null;
+            IEnumerable<CategoryViewModel> categories = null;
+            IEnumerable<ConditionViewModel> conditions = null;
+            using(var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
+                var responeTask = client.GetAsync("Brand");
+                responeTask.Wait();
+
+                var result = responeTask.Result;
+                if(result.IsSuccessStatusCode)
+                {
+                    var readJob = result.Content.ReadAsAsync<IList<BrandViewModel>>();
+                    readJob.Wait();
+                    brands = readJob.Result;
+                    model.AllBrands = brands;
+                }
+
+                responeTask = client.GetAsync("category/" + true);
+                responeTask.Wait();
+
+                result = responeTask.Result;
+                if(result.IsSuccessStatusCode)
+                {
+                    var readJob = result.Content.ReadAsAsync<IList<CategoryViewModel>>();
+                    readJob.Wait();
+                    categories = readJob.Result;
+                    model.AllCategories = categories;
+                }
+
+                responeTask = client.GetAsync("condition/" + true);
+                responeTask.Wait();
+
+                result = responeTask.Result;
+                if(result.IsSuccessStatusCode)
+                {
+                    var readJob = result.Content.ReadAsAsync<IList<ConditionViewModel>>();
+                    readJob.Wait();
+                    conditions = readJob.Result;
+                    model.AllConditions = conditions;
+                }
+            }
         }
 
         [HttpPost]
@@ -57,7 +105,7 @@ namespace CollectionTrackerMVC.Controllers
                 using(var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
-                    var postJob = client.PostAsJsonAsync<CollectionViewModel>("collection", model);
+                    var postJob = client.PostAsJsonAsync<CollectionViewModel>("Collection", model);
                     postJob.Wait();
 
                     var postResult = postJob.Result;
@@ -72,6 +120,7 @@ namespace CollectionTrackerMVC.Controllers
                         ModelState.AddModelError(String.Empty, readError.Result);
                     }
                 }
+                FillCollections(ref model);
                 return View(model);
             }
             catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }
@@ -96,6 +145,7 @@ namespace CollectionTrackerMVC.Controllers
                         collection = readTask.Result;
                     }
                 }
+                FillCollections(ref collection);
                 return View(collection);
             }
             catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }
@@ -124,6 +174,7 @@ namespace CollectionTrackerMVC.Controllers
                         ModelState.AddModelError(String.Empty, readError.Result);
                     }
                 }
+                FillCollections(ref model);
                 return View(model);
             }
             catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }

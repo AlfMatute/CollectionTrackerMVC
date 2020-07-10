@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<CollectionTrackerMVC.Models.CollectionViewModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Collection";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -27,6 +27,9 @@
         <th>
             @Html.DisplayNameFor(model => model.Description)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BrandId)
+        </th>
         <th></th>
     </tr>
 
@@ -48,8 +51,10 @@
             @Html.DisplayFor(modelItem => item.Description)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.BrandId)
+        </td>
+        <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.CollectionId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CollectionId }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.CollectionId })
         </td>
     </tr>
