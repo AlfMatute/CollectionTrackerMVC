@@ -24,8 +24,7 @@ namespace CollectionTrackerMVC.Models
         [DisplayName("Cost")]
         public double ArticleCost { get; set; }
 
-        //[Required]
-       // public ConditionViewModel Condition { get; set; }
+        public ConditionViewModel Condition { get; set; }
         public IEnumerable<ConditionViewModel> AllConditions { get; set; }
         [Required]
         [DisplayName("Condition")]
@@ -37,11 +36,14 @@ namespace CollectionTrackerMVC.Models
         [Required]
         [DisplayName("Category")]
         public int CategoryId { get; set; }
+
+        public CategoryViewModel Category { get; set; }
         public IEnumerable<CategoryViewModel> AllCategories { get; set; }
 
         [Required]
         [DisplayName("Brand")]
         public int BrandId { get; set; }
+        public BrandViewModel Brand { get; set; }
         public IEnumerable<BrandViewModel> AllBrands { get; set; }
 
         [MaxLength(250)]

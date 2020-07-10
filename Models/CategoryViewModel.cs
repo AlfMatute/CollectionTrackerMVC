@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CollectionTrackerMVC.Models
@@ -10,6 +11,7 @@ namespace CollectionTrackerMVC.Models
         public int CategoryId { get; set; }
         [Required]
         [MaxLength(150)]
+        [DisplayName("Category Description")]
         public string Description { get; set; }
         [Required]
         public bool Active { get; set; }
