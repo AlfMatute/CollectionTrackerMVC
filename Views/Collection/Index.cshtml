@@ -28,7 +28,13 @@
             @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.ConditionId)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.BrandId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CategoryId)
         </th>
         <th></th>
     </tr>
@@ -51,7 +57,13 @@
             @Html.DisplayFor(modelItem => item.Description)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.BrandId)
+            @Html.DisplayFor(model => item.ConditionId)
+        </td>
+        <td>
+            @Html.DisplayFor(model => item.BrandId)
+        </td>
+        <td>
+            @Html.DisplayFor(model => item.CategoryId)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.CollectionId }) |
