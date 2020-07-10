@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CollectionTrackerMVC.Models
@@ -11,6 +12,7 @@ namespace CollectionTrackerMVC.Models
 
         [Required]
         [MaxLength(100)]
+        [DisplayName("Brand Name")]
         public string BrandName { get; set; }
 
         [MaxLength(250)]
