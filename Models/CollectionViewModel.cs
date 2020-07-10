@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,26 +14,33 @@ namespace CollectionTrackerMVC.Models
 
         [Required]
         [MaxLength(250)]
+        [DisplayName("Item name")]
         public string ArticleName { get; set; }
 
         [Required]
+        [DisplayName("Acquisition Date")]
         public DateTime AcquisitionDate { get; set; }
 
+        [DisplayName("Cost")]
         public double ArticleCost { get; set; }
 
         //[Required]
        // public ConditionViewModel Condition { get; set; }
         public IEnumerable<ConditionViewModel> AllConditions { get; set; }
         [Required]
+        [DisplayName("Condition")]
         public int ConditionId { get; set; }
 
+        [DisplayName("Fabrication Date")]
         public DateTime FabricationDate { get; set; }
 
         [Required]
+        [DisplayName("Category")]
         public int CategoryId { get; set; }
         public IEnumerable<CategoryViewModel> AllCategories { get; set; }
 
         [Required]
+        [DisplayName("Brand")]
         public int BrandId { get; set; }
         public IEnumerable<BrandViewModel> AllBrands { get; set; }
 
