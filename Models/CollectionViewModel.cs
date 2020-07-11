@@ -50,7 +50,5 @@ namespace CollectionTrackerMVC.Models
         public string Description { get; set; }
 
         public CollectionUser CollectionUser { get; set; }
-
-        public string UserEmail { get; set; }
     }
 }

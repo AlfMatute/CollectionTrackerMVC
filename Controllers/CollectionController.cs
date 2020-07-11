@@ -21,7 +21,7 @@ namespace CollectionTrackerMVC.Controllers
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
-                    var responseTask = client.GetAsync("collection/" + LoginViewModel.UserMail);
+                    var responseTask = client.GetAsync("collection/");
                     responseTask.Wait();
 
                     var result = responseTask.Result;
@@ -104,7 +104,6 @@ namespace CollectionTrackerMVC.Controllers
             {
                 using(var client = new HttpClient())
                 {
-                    model = LoginViewModel.UserMail;
                     client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
                     var postJob = client.PostAsJsonAsync<CollectionViewModel>("Collection", model);
                     postJob.Wait();
