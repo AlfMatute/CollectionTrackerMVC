@@ -21,14 +21,24 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    @if (CollectionTrackerMVC.Models.LoginViewModel.Logged)
+                    {
                     <li>@Html.ActionLink("Brand", "Index", "Brand")</li>
                     <li>@Html.ActionLink("Category", "Index", "Category")</li>
                     <li>@Html.ActionLink("Condition", "Index", "Condition")</li>
                     <li>@Html.ActionLink("Collection", "Index", "Collection")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    }
+                    @if (!CollectionTrackerMVC.Models.LoginViewModel.Logged)
+                    {
                     <li>@Html.ActionLink("Register", "Register", "Login")</li>
                     <li>@Html.ActionLink("Login", "Login", "Login")</li>
+                    }
+                    @if(CollectionTrackerMVC.Models.LoginViewModel.Logged)
+                    {
+                        <li>@Html.ActionLink("Logout", "Logout", "Login")</li>
+                    }
                 </ul>
             </div>
         </div>

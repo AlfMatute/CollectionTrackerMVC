@@ -74,6 +74,8 @@ namespace CollectionTrackerMVC.Controllers
                     var result = getJob.Result;
                     if(result.IsSuccessStatusCode)
                     {
+                        LoginViewModel.Logged = true;
+                        LoginViewModel.UserMail = model.Email;
                         return RedirectToAction("Index", "Home");
                     }
                     else
@@ -82,6 +84,38 @@ namespace CollectionTrackerMVC.Controllers
                         readError.Wait();
                         ModelState.AddModelError(String.Empty, readError.Result);
                         return View(model);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                ViewBag.Title = ErrorTitle;
+                ViewBag.ErrorMessage = ErrorPart + ex.Message;
+                return View("Error");
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
+                    var getJob = client.GetAsync("login");
+                    getJob.Wait();
+
+                    var result = getJob.Result;
+                    if(result.IsSuccessStatusCode)
+                    {
+                        LoginViewModel.Logged = false;
+                        LoginViewModel.UserMail = String.Empty;
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        return View("Error");
                     }
                 }
             }

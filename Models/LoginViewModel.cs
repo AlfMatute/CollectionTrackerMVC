@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace CollectionTrackerMVC.Models
 {
@@ -17,10 +18,15 @@ namespace CollectionTrackerMVC.Models
 
         public CollectionUser CollectionUser { get; set; }
 
+        [DisplayName("First Name")]
         public string FirstName { get; set; }
-
+        [DisplayName("Last Name")]
         public string LastName { get; set; }
 
         public bool Register { get; set; }
+
+        public static bool Logged { get; set; }
+
+        public static string UserMail { get; set; }
     }
 }
