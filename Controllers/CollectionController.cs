@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CollectionTrackerMVC.Controllers
@@ -17,38 +16,52 @@ namespace CollectionTrackerMVC.Controllers
         {
             try
             {
-                IEnumerable<CollectionViewModel> collection = null;
-                using (var client = new HttpClient())
+                if (LoginViewModel.Logged)
                 {
-                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
-                    var responseTask = client.GetAsync("collection/");
-                    responseTask.Wait();
+                    IEnumerable<CollectionViewModel> collection = null;
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
+                        var responseTask = client.GetAsync("collection/");
+                        responseTask.Wait();
 
-                    var result = responseTask.Result;
-                    if (result.IsSuccessStatusCode)
-                    {
-                        var readJob = result.Content.ReadAsAsync<IList<CollectionViewModel>>();
-                        readJob.Wait();
-                        collection = readJob.Result;
+                        var result = responseTask.Result;
+                        if (result.IsSuccessStatusCode)
+                        {
+                            var readJob = result.Content.ReadAsAsync<IList<CollectionViewModel>>();
+                            readJob.Wait();
+                            collection = readJob.Result;
+                        }
+                        else
+                        {
+                            collection = Enumerable.Empty<CollectionViewModel>();
+                            var readError = result.Content.ReadAsStringAsync();
+                            readError.Wait();
+                            ModelState.AddModelError(String.Empty, readError.Result);
+                        }
                     }
-                    else
-                    {
-                        collection = Enumerable.Empty<CollectionViewModel>();
-                        var readError = result.Content.ReadAsStringAsync();
-                        readError.Wait();
-                        ModelState.AddModelError(String.Empty, readError.Result);
-                    }
+                    return View(collection);
                 }
-                return View(collection);
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
             catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }
         }
 
         public ActionResult Create()
         {
-            CollectionViewModel model = new CollectionViewModel();
-            FillCollections(ref model);
-            return View(model);
+            if (LoginViewModel.Logged)
+            {
+                CollectionViewModel model = new CollectionViewModel();
+                FillCollections(ref model);
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public void FillCollections(ref CollectionViewModel model)
@@ -130,23 +143,30 @@ namespace CollectionTrackerMVC.Controllers
         {
             try
             {
-                CollectionViewModel collection = null;
-                using(var client = new HttpClient())
+                if (LoginViewModel.Logged)
                 {
-                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
-                    var responseTask = client.GetAsync("collection/" + id.ToString());
-                    responseTask.Wait();
-
-                    var result = responseTask.Result;
-                    if(result.IsSuccessStatusCode)
+                    CollectionViewModel collection = null;
+                    using (var client = new HttpClient())
                     {
-                        var readTask = result.Content.ReadAsAsync<CollectionViewModel>();
-                        readTask.Wait();
-                        collection = readTask.Result;
+                        client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
+                        var responseTask = client.GetAsync("collection/" + id.ToString());
+                        responseTask.Wait();
+
+                        var result = responseTask.Result;
+                        if (result.IsSuccessStatusCode)
+                        {
+                            var readTask = result.Content.ReadAsAsync<CollectionViewModel>();
+                            readTask.Wait();
+                            collection = readTask.Result;
+                        }
                     }
+                    FillCollections(ref collection);
+                    return View(collection);
                 }
-                FillCollections(ref collection);
-                return View(collection);
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
             catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }
         }

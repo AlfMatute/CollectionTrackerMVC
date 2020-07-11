@@ -16,37 +16,51 @@ namespace CollectionTrackerMVC.Controllers
         {
             try
             {
-                IEnumerable<CategoryViewModel> category = null;
-                using (var client = new HttpClient())
+                if (LoginViewModel.Logged)
                 {
-                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
-                    bool? active = null;
-                    var responseTask = client.GetAsync("category/" + active);
-                    responseTask.Wait();
+                    IEnumerable<CategoryViewModel> category = null;
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
+                        bool? active = null;
+                        var responseTask = client.GetAsync("category/" + active);
+                        responseTask.Wait();
 
-                    var result = responseTask.Result;
-                    if (result.IsSuccessStatusCode)
-                    {
-                        var readJob = result.Content.ReadAsAsync<IList<CategoryViewModel>>();
-                        readJob.Wait();
-                        category = readJob.Result;
+                        var result = responseTask.Result;
+                        if (result.IsSuccessStatusCode)
+                        {
+                            var readJob = result.Content.ReadAsAsync<IList<CategoryViewModel>>();
+                            readJob.Wait();
+                            category = readJob.Result;
+                        }
+                        else
+                        {
+                            category = Enumerable.Empty<CategoryViewModel>();
+                            var readError = result.Content.ReadAsStringAsync();
+                            readError.Wait();
+                            ModelState.AddModelError(String.Empty, readError.Result);
+                        }
                     }
-                    else
-                    {
-                        category = Enumerable.Empty<CategoryViewModel>();
-                        var readError = result.Content.ReadAsStringAsync();
-                        readError.Wait();
-                        ModelState.AddModelError(String.Empty, readError.Result);
-                    }
+                    return View(category);
                 }
-                return View(category);
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
             catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }
         }
 
         public ActionResult Create()
         {
-            return View();
+            if (LoginViewModel.Logged)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpPost]
@@ -81,22 +95,29 @@ namespace CollectionTrackerMVC.Controllers
         {
             try
             {
-                CategoryViewModel category = null;
-                using(var client = new HttpClient())
+                if (LoginViewModel.Logged)
                 {
-                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
-                    var responseTask = client.GetAsync("category/" + id.ToString());
-                    responseTask.Wait();
-
-                    var result = responseTask.Result;
-                    if(result.IsSuccessStatusCode)
+                    CategoryViewModel category = null;
+                    using (var client = new HttpClient())
                     {
-                        var readTask = result.Content.ReadAsAsync<CategoryViewModel>();
-                        readTask.Wait();
-                        category = readTask.Result;
+                        client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
+                        var responseTask = client.GetAsync("category/" + id.ToString());
+                        responseTask.Wait();
+
+                        var result = responseTask.Result;
+                        if (result.IsSuccessStatusCode)
+                        {
+                            var readTask = result.Content.ReadAsAsync<CategoryViewModel>();
+                            readTask.Wait();
+                            category = readTask.Result;
+                        }
                     }
+                    return View(category);
                 }
-                return View(category);
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
             catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }
         }

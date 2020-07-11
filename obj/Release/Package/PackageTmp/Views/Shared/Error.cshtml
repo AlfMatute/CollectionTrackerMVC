@@ -1,0 +1,18 @@
+﻿@if (ViewBag.ErrorTitle == null)
+{
+        <h1>Error.</h1>
+        <h2>An error occurred while processing your request.</h2>
+}
+else
+{
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>@ViewBag.ErrorTitle</title>
+    </head>
+    <body>
+        <hgroup>
+            <h1 class="text-danger">@ViewBag.ErrorTitle</h1>
+            <h2 class="text-danger">@ViewBag.ErrorMessage</h2>
+        </hgroup>
+    </body>
+}

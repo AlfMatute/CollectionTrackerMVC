@@ -16,37 +16,51 @@ namespace CollectionTrackerMVC.Controllers
         {
             try
             {
-                IEnumerable<ConditionViewModel> condition = null;
-                using (var client = new HttpClient())
+                if (LoginViewModel.Logged)
                 {
-                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
-                    bool? active = null;
-                    var responseTask = client.GetAsync("condition/" + active);
-                    responseTask.Wait();
+                    IEnumerable<ConditionViewModel> condition = null;
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
+                        bool? active = null;
+                        var responseTask = client.GetAsync("condition/" + active);
+                        responseTask.Wait();
 
-                    var result = responseTask.Result;
-                    if (result.IsSuccessStatusCode)
-                    {
-                        var readJob = result.Content.ReadAsAsync<IList<ConditionViewModel>>();
-                        readJob.Wait();
-                        condition = readJob.Result;
+                        var result = responseTask.Result;
+                        if (result.IsSuccessStatusCode)
+                        {
+                            var readJob = result.Content.ReadAsAsync<IList<ConditionViewModel>>();
+                            readJob.Wait();
+                            condition = readJob.Result;
+                        }
+                        else
+                        {
+                            condition = Enumerable.Empty<ConditionViewModel>();
+                            var readError = result.Content.ReadAsStringAsync();
+                            readError.Wait();
+                            ModelState.AddModelError(String.Empty, readError.Result);
+                        }
                     }
-                    else
-                    {
-                        condition = Enumerable.Empty<ConditionViewModel>();
-                        var readError = result.Content.ReadAsStringAsync();
-                        readError.Wait();
-                        ModelState.AddModelError(String.Empty, readError.Result);
-                    }
+                    return View(condition);
                 }
-                return View(condition);
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
             catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }
         }
 
         public ActionResult Create()
         {
-            return View();
+            if (LoginViewModel.Logged)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpPost]
@@ -81,22 +95,29 @@ namespace CollectionTrackerMVC.Controllers
         {
             try
             {
-                ConditionViewModel condition = null;
-                using(var client = new HttpClient())
+                if (LoginViewModel.Logged)
                 {
-                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
-                    var responseTask = client.GetAsync("condition/" + id.ToString());
-                    responseTask.Wait();
-
-                    var result = responseTask.Result;
-                    if(result.IsSuccessStatusCode)
+                    ConditionViewModel condition = null;
+                    using (var client = new HttpClient())
                     {
-                        var readTask = result.Content.ReadAsAsync<ConditionViewModel>();
-                        readTask.Wait();
-                        condition = readTask.Result;
+                        client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
+                        var responseTask = client.GetAsync("condition/" + id.ToString());
+                        responseTask.Wait();
+
+                        var result = responseTask.Result;
+                        if (result.IsSuccessStatusCode)
+                        {
+                            var readTask = result.Content.ReadAsAsync<ConditionViewModel>();
+                            readTask.Wait();
+                            condition = readTask.Result;
+                        }
                     }
+                    return View(condition);
                 }
-                return View(condition);
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
             catch (Exception ex) { ViewBag.ErrorTitle = ErrorTitle; ViewBag.ErrorMessage = ErrorPart + ex.Message; return View("Error"); }
         }

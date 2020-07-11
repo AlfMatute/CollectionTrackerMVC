@@ -1,0 +1,75 @@
+﻿@model IEnumerable<CollectionTrackerMVC.Models.CollectionViewModel>
+
+@{
+    ViewBag.Title = "Collection";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>My Collection</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ArticleName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AcquisitionDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ArticleCost)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FabricationDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Condition.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Brand.BrandName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Category.Description)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ArticleName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AcquisitionDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ArticleCost)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FabricationDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(model => item.Condition.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(model => item.Brand.BrandName)
+        </td>
+        <td>
+            @Html.DisplayFor(model => item.Category.Description)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.CollectionId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.CollectionId }, new { onclick = "return confirm('Are you sure you want to delete this item?');" })
+        </td>
+    </tr>
+}
+
+</table>

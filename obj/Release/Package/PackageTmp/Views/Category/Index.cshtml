@@ -1,0 +1,39 @@
+﻿@model IEnumerable<CollectionTrackerMVC.Models.CategoryViewModel>
+
+@{
+    ViewBag.Title = "Categories";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Active)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Active)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.CategoryId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.CategoryId }, new { onclick = "return confirm('Are you sure you want to delete this item?');" })
+        </td>
+    </tr>
+}
+
+</table>

@@ -16,13 +16,27 @@ namespace CollectionTrackerMVC.Controllers
         // GET: Account
         public ActionResult Login()
         {
-            return View();
+            if (!LoginViewModel.Logged)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         //Register
         public ActionResult Register()
         {
-            return View();
+            if (!LoginViewModel.Logged)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpPost]

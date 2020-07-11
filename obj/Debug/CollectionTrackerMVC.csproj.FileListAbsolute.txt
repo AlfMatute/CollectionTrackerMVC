@@ -1,5 +1,3 @@
-C:\Users\pidgy\source\repos\CollectionTrackerMVC\obj\Debug\CollectionTrackerMVC.csprojAssemblyReference.cache
-C:\Users\pidgy\source\repos\CollectionTrackerMVC\obj\Debug\CollectionTrackerMVC.csproj.CoreCompileInputs.cache
 C:\Users\pidgy\source\repos\CollectionTrackerMVC\bin\CollectionTrackerMVC.dll.config
 C:\Users\pidgy\source\repos\CollectionTrackerMVC\bin\CollectionTrackerMVC.dll
 C:\Users\pidgy\source\repos\CollectionTrackerMVC\bin\CollectionTrackerMVC.pdb
@@ -160,6 +158,8 @@ C:\Users\pidgy\source\repos\CollectionTrackerMVC\bin\System.Web.WebPages.Razor.x
 C:\Users\pidgy\source\repos\CollectionTrackerMVC\bin\Newtonsoft.Json.xml
 C:\Users\pidgy\source\repos\CollectionTrackerMVC\bin\Antlr3.Runtime.pdb
 C:\Users\pidgy\source\repos\CollectionTrackerMVC\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\pidgy\source\repos\CollectionTrackerMVC\obj\Debug\CollectionTrackerMVC.csprojAssemblyReference.cache
+C:\Users\pidgy\source\repos\CollectionTrackerMVC\obj\Debug\CollectionTrackerMVC.csproj.CoreCompileInputs.cache
 C:\Users\pidgy\source\repos\CollectionTrackerMVC\obj\Debug\CollectionTrackerMVC.csproj.CopyComplete
 C:\Users\pidgy\source\repos\CollectionTrackerMVC\obj\Debug\CollectionTrackerMVC.dll
 C:\Users\pidgy\source\repos\CollectionTrackerMVC\obj\Debug\CollectionTrackerMVC.pdb

@@ -16,29 +16,36 @@ namespace CollectionTrackerMVC.Controllers
         {
             try
             {
-                IEnumerable<BrandViewModel> brand = null;
-                using (var client = new HttpClient())
+                if (LoginViewModel.Logged)
                 {
-                    client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
-                    var responseTask = client.GetAsync("Brand");
-                    responseTask.Wait();
+                    IEnumerable<BrandViewModel> brand = null;
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(Properties.Settings.Default.APISetting);
+                        var responseTask = client.GetAsync("Brand");
+                        responseTask.Wait();
 
-                    var result = responseTask.Result;
-                    if (result.IsSuccessStatusCode)
-                    {
-                        var readJob = result.Content.ReadAsAsync<IList<BrandViewModel>>();
-                        readJob.Wait();
-                        brand = readJob.Result;
+                        var result = responseTask.Result;
+                        if (result.IsSuccessStatusCode)
+                        {
+                            var readJob = result.Content.ReadAsAsync<IList<BrandViewModel>>();
+                            readJob.Wait();
+                            brand = readJob.Result;
+                        }
+                        else
+                        {
+                            brand = Enumerable.Empty<BrandViewModel>();
+                            var readError = result.Content.ReadAsStringAsync();
+                            readError.Wait();
+                            ModelState.AddModelError(String.Empty, readError.Result);
+                        }
                     }
-                    else
-                    {
-                        brand = Enumerable.Empty<BrandViewModel>();
-                        var readError = result.Content.ReadAsStringAsync();
-                        readError.Wait();
-                        ModelState.AddModelError(String.Empty, readError.Result);
-                    }
+                    return View(brand);
                 }
-                return View(brand);
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
             catch(Exception ex) 
             {
@@ -50,7 +57,14 @@ namespace CollectionTrackerMVC.Controllers
 
         public ActionResult Create()
         {
-            return View();
+            if (LoginViewModel.Logged)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpPost]
@@ -89,8 +103,15 @@ namespace CollectionTrackerMVC.Controllers
         {
             try
             {
-                BrandViewModel brand = ReadFromApi(id);
-                return View(brand);
+                if (LoginViewModel.Logged)
+                {
+                    BrandViewModel brand = ReadFromApi(id);
+                    return View(brand);
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
             catch (Exception ex)
             {
