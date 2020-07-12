@@ -26,7 +26,7 @@ namespace CollectionTrackerMVC.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://localhost:44394/api/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://collectiontrackerapi.azurewebsites.net/api/")]
         public string APISetting {
             get {
                 return ((string)(this["APISetting"]));
